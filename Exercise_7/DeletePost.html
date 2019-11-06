@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Posts</title>
+</head>
+
+<body>
+    <header>Select what posts to delete:</header>
+    <form action="DeletePost.php" method="post">
+          <table border='1'>
+            <tr><th>Posts</th><th>Authors</th><th>Delete?</th>
+            <?php
+            $mysqli = new mysqli("mysql.eecs.ku.edu", "alfonsomarte110", "Xubeub3E", "alfonsomarte110");
+
+            /* check connection */
+            if ($mysqli->connect_errno) {
+                printf("Connect failed: %s\n", $mysqli->connect_error);
+                exit();
+            }
+
+            $query = "SELECT author_id,content FROM Posts";
+
+            if ($result = $mysqli->query($query)) {
+                /* fetch associative array */
+                while ($row = $result->fetch_assoc()) {
+            ?>
+            <tr><td><?php echo $row["content"]; ?></td><td><?php echo $row["author_id"]; ?></td><td><input type="checkbox" name="check[]" value="<?php echo $row["content"]; ?>|<?php echo $row["author_id"]; ?>"><br></td></tr>
+            <?php
+                }
+
+                /* free result set */
+                $result->free();
+            }
+            else {
+              echo "There are no users<br>";
+            }
+
+            /* close connection */
+            $mysqli->close();
+            ?>
+          </table><br>
+        <input type="submit" name="My button" value="Submit">
+    </form>
+</body>
+</html>
